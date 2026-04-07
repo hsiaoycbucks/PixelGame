@@ -1,0 +1,129 @@
+:root {
+  --bg-color: #2b2b2b;
+  --text-color: #ffffff;
+  --primary-color: #e52521;
+  --secondary-color: #3b3b3b;
+  --pixel-border: 4px solid var(--text-color);
+  --shadow-color: #000000;
+  --btn-hover: #ff4742;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  /* Pixel font with Chinese fallback */
+  font-family: 'Press Start 2P', "Microsoft YaHei", "PingFang SC", sans-serif;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-image: 
+    linear-gradient(45deg, #222 25%, transparent 25%, transparent 75%, #222 75%, #222), 
+    linear-gradient(45deg, #222 25%, transparent 25%, transparent 75%, #222 75%, #222);
+  background-size: 20px 20px;
+  background-position: 0 0, 10px 10px;
+}
+
+.app-container {
+  width: 100%;
+  max-width: 600px;
+  padding: 20px;
+}
+
+.pixel-box {
+  background-color: var(--secondary-color);
+  border: var(--pixel-border);
+  box-shadow: 8px 8px 0px var(--shadow-color);
+  padding: 30px;
+  text-align: center;
+}
+
+.pixel-title {
+  color: #ffcc00;
+  text-shadow: 4px 4px 0px var(--shadow-color);
+  margin-bottom: 30px;
+  line-height: 1.5;
+}
+
+.pixel-input {
+  font-family: inherit;
+  width: 100%;
+  padding: 15px;
+  background-color: #fff;
+  color: #000;
+  border: 4px solid var(--shadow-color);
+  font-size: 16px;
+  margin-bottom: 20px;
+  outline: none;
+}
+
+.pixel-input:focus {
+  border-color: var(--primary-color);
+}
+
+.pixel-btn {
+  font-family: inherit;
+  background-color: var(--primary-color);
+  color: white;
+  border: 4px solid white;
+  box-shadow: 6px 6px 0px var(--shadow-color);
+  padding: 15px 20px;
+  cursor: pointer;
+  text-transform: uppercase;
+  margin: 10px 0;
+  font-size: 16px;
+  transition: transform 0.1s;
+  width: 100%;
+}
+
+.pixel-btn:hover {
+  background-color: var(--btn-hover);
+}
+
+.pixel-btn:active {
+  transform: translate(6px, 6px);
+  box-shadow: 0px 0px 0px var(--shadow-color);
+}
+
+.pixel-btn:disabled {
+  background-color: #888;
+  cursor: not-allowed;
+}
+
+.dicebear-img {
+  width: 150px;
+  height: 150px;
+  image-rendering: pixelated;
+  margin: 0 auto 20px;
+  display: block;
+  background-color: #fff;
+  border: 4px solid var(--shadow-color);
+}
+
+.question-text {
+  font-size: 18px;
+  line-height: 1.8;
+  margin-bottom: 30px;
+  text-align: left;
+}
+
+.options-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.loading {
+  font-size: 20px;
+  animation: blink 1s infinite;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
