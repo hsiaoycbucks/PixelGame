@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { Question } from '../types';
 
 interface QuizProps {
@@ -15,6 +15,16 @@ export default function Quiz({ userId, questions, onFinish }: QuizProps) {
   const currentQ = questions[currentIndex];
   // 使用問題的 id 作為圖片 seed，確保同題目圖一樣，或是加上一個位移增加隨機感
   const seed = currentQ ? currentQ.id : currentIndex + 1;
+
+  const shuffledOptions = useMemo(() => {
+    if (!currentQ) return [];
+    const options = ['A', 'B', 'C', 'D'];
+    for (let i = options.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [options[i], options[j]] = [options[j], options[i]];
+    }
+    return options;
+  }, [currentIndex, currentQ]);
 
   const handleSelect = async (optionKey: string) => {
     if (submitting) return; // 避免連點
@@ -82,14 +92,14 @@ export default function Quiz({ userId, questions, onFinish }: QuizProps) {
             {currentQ.question}
           </div>
           <div className="options-grid">
-            {['A', 'B', 'C', 'D'].map(opt => (
+            {shuffledOptions.map(opt => (
               <button 
                 key={opt}
                 className="pixel-btn"
                 onClick={() => handleSelect(opt)}
                 style={{ textAlign: 'left', textTransform: 'none' }}
               >
-                {opt}. {currentQ[opt as 'A'|'B'|'C'|'D']}
+                {currentQ[opt as 'A'|'B'|'C'|'D']}
               </button>
             ))}
           </div>
