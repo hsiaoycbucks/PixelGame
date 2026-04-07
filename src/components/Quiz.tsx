@@ -51,7 +51,8 @@ export default function Quiz({ userId, questions, onFinish }: QuizProps) {
           body: JSON.stringify({
             action: 'submitAnswers',
             userId: userId,
-            answers: newAnswers
+            answers: newAnswers,
+            passThreshold: parseInt(import.meta.env.VITE_PASS_THRESHOLD || '3', 10)
           })
         });
         

@@ -64,6 +64,7 @@ function doPost(e) {
     if (action === 'submitAnswers') {
       const userId = String(postData.userId);
       const userAnswers = postData.answers || []; // [{questionId, answer}, ...]
+      const passThreshold = Number(postData.passThreshold || 3);
       
       // 計算分數
       let score = 0;
@@ -113,7 +114,9 @@ function doPost(e) {
       
       if (foundRow === -1) {
         // [ID, 闖關次數, 總分, 最高分, 第一次通關分數, 花了幾次通關, 最近遊玩時間]
-        aSheet.appendRow([userId, 1, score, score, "", "", currentTime]);
+        const firstPassScore = score >= passThreshold ? score : "";
+        const timesTaken = score >= passThreshold ? 1 : "";
+        aSheet.appendRow([userId, 1, score, score, firstPassScore, timesTaken, currentTime]);
       } else {
         // 更新現有資料
         const playCount = Number(aSheet.getRange(foundRow, 2).getValue()) + 1;
@@ -125,8 +128,12 @@ function doPost(e) {
         aSheet.getRange(foundRow, 4).setValue(newHighest);   // 最高分
         aSheet.getRange(foundRow, 7).setValue(currentTime);  // 最近遊玩時間
         
-        // 第一次通關邏輯：若以前第一次通關分數沒填，且現在分數達標(假設過關門檻為3，可自行修改或由前端傳)，即填入
-        // 若需求是 "若同 ID 已通關過，後續分數不覆蓋" -> 即代表 第一次通關分數 若有值就不改變
+        // 第一次通關邏輯：若以前第一次通關分數沒填 (第 5 欄)，且現在分數達標
+        const existingFirstPass = aSheet.getRange(foundRow, 5).getValue();
+        if (score >= passThreshold && (existingFirstPass === "" || existingFirstPass === null)) {
+          aSheet.getRange(foundRow, 5).setValue(score);      // 第一次通關分數
+          aSheet.getRange(foundRow, 6).setValue(playCount);  // 花了幾次通關
+        }
       }
       
       return ContentService.createTextOutput(JSON.stringify({ success: true, score: score, results: results }))
