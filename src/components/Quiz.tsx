@@ -1,10 +1,10 @@
 import { useState, useMemo } from 'react';
-import { Question } from '../types';
+import { Question, AnswerResult } from '../types';
 
 interface QuizProps {
   userId: string;
   questions: Question[];
-  onFinish: (score: number) => void;
+  onFinish: (score: number, results: AnswerResult[]) => void;
 }
 
 export default function Quiz({ userId, questions, onFinish }: QuizProps) {
@@ -57,7 +57,7 @@ export default function Quiz({ userId, questions, onFinish }: QuizProps) {
         
         const data = await response.json();
         if (data.success) {
-          onFinish(data.score);
+          onFinish(data.score, data.results);
         } else {
           alert('成績計算失敗: ' + data.error);
           setSubmitting(false);

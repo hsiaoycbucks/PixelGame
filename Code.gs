@@ -76,10 +76,22 @@ function doPost(e) {
         ansDict[qData[i][0]] = qData[i][6]; // 假設題號在第0欄，解答在第6欄
       }
       
+      const results = [];
       for (const ua of userAnswers) {
-        if (ansDict[ua.questionId] && String(ansDict[ua.questionId]).trim().toUpperCase() === String(ua.answer).trim().toUpperCase()) {
-          score += 1;
+        let correctAns = "";
+        if (ansDict[ua.questionId]) {
+          correctAns = String(ansDict[ua.questionId]).trim().toUpperCase();
         }
+        const userAns = String(ua.answer).trim().toUpperCase();
+        const isCorrect = correctAns === userAns;
+        if (isCorrect) score += 1;
+        
+        results.push({
+          questionId: ua.questionId,
+          userAnswer: userAns,
+          correctAnswer: correctAns,
+          isCorrect: isCorrect
+        });
       }
       
       // 處理「回答」工作表
@@ -117,7 +129,7 @@ function doPost(e) {
         // 若需求是 "若同 ID 已通關過，後續分數不覆蓋" -> 即代表 第一次通關分數 若有值就不改變
       }
       
-      return ContentService.createTextOutput(JSON.stringify({ success: true, score: score }))
+      return ContentService.createTextOutput(JSON.stringify({ success: true, score: score, results: results }))
         .setMimeType(ContentService.MimeType.JSON);
     }
   } catch (error) {

@@ -7,6 +7,13 @@ export interface Question {
   D: string;
 }
 
+export interface AnswerResult {
+  questionId: number;
+  userAnswer: string;
+  correctAnswer: string;
+  isCorrect: boolean;
+}
+
 export interface QuizResult {
   userId: string;
   score: number;

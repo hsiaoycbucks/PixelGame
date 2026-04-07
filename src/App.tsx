@@ -2,14 +2,14 @@ import { useState, useEffect } from 'react';
 import Home from './components/Home';
 import Quiz from './components/Quiz';
 import Result from './components/Result';
-import { Question } from './types';
+import { Question, AnswerResult } from './types';
 
 function App() {
   const [view, setView] = useState<'HOME' | 'QUIZ' | 'RESULT'>('HOME');
   const [userId, setUserId] = useState('');
   const [questions, setQuestions] = useState<Question[]>([]);
   const [score, setScore] = useState(0);
-  const [totalQuestions, setTotalQuestions] = useState(0);
+  const [answerResults, setAnswerResults] = useState<AnswerResult[]>([]);
 
   // Preload Dicebear Images
   useEffect(() => {
@@ -26,13 +26,14 @@ function App() {
   const handleStartGame = (id: string, fetchedQuestions: Question[]) => {
     setUserId(id);
     setQuestions(fetchedQuestions);
-    setTotalQuestions(fetchedQuestions.length);
     setScore(0);
+    setAnswerResults([]);
     setView('QUIZ');
   };
 
-  const handleFinishGame = (finalScore: number) => {
+  const handleFinishGame = (finalScore: number, results: AnswerResult[]) => {
     setScore(finalScore);
+    setAnswerResults(results);
     setView('RESULT');
   };
 
@@ -44,7 +45,7 @@ function App() {
     <div className="app-container">
       {view === 'HOME' && <Home onStart={handleStartGame} />}
       {view === 'QUIZ' && <Quiz userId={userId} questions={questions} onFinish={handleFinishGame} />}
-      {view === 'RESULT' && <Result score={score} total={totalQuestions} onPlayAgain={handlePlayAgain} />}
+      {view === 'RESULT' && <Result score={score} questions={questions} results={answerResults} onPlayAgain={handlePlayAgain} />}
     </div>
   );
 }
