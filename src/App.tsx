@@ -15,7 +15,7 @@ function App() {
   useEffect(() => {
     const preloadImages = () => {
       // 這裡簡單 preload 1~100 的種子
-      for(let i=1; i<=100; i++){
+      for (let i = 1; i <= 100; i++) {
         const img = new Image();
         img.src = `https://api.dicebear.com/8.x/pixel-art/svg?seed=${i}`;
       }
